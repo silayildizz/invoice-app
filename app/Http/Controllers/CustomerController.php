@@ -46,7 +46,7 @@ class CustomerController extends Controller
 
     // 2) Kayıt (Customer modelinde $fillable tanımlı olmalı)
 
-
+    Customer::create($data);
     // 3) Başarılı olursa listeye geri dön ve mesaj göster
     return redirect()
         ->route('customers.index')

@@ -15,6 +15,7 @@ Route::get('/customers', action: [CustomerController::class, 'index']);
 
 Route::resource('customers', CustomerController::class);
 
+
 /*Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create'); // formu göster
 Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');        // formu kaydet
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');         // liste (geri dönmek için)*/
