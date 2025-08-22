@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Auth;
 
 
 class CustomerController extends Controller
@@ -13,11 +14,16 @@ class CustomerController extends Controller
      */
     public function index(Customer $customers)
     {
+        if (!Auth::check()) {
+            return redirect('/auth');
+        }
+    // Misafire login & register butonlu açılış sayfası
+    
         // tüm müşterileri çek
-    $customers = Customer::all();
+        $customers = Customer::all();
 
-    // customers.index blade'ine gönder
-    return view('customers.index', compact('customers'));
+        // customers.index blade'ine gönder
+        return view('customers.index', compact('customers'));
         
     }
 
@@ -35,18 +41,16 @@ class CustomerController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request, Customer $customer)
-    {
-        // 1) Validasyon (kullanıcı hatalı veri girmesin diye)
-    $data = $request->validate([
-        'name'    => 'required|string|max:120',
-        'email'   => 'nullable|email',
-        'phone'   => 'nullable|string|max:20',
-        'address' => 'nullable|string|max:255',
+    {// 1) Validasyon
+        $data = $request->validate([
+        'name'  => 'required|string|max:255',
+        'email' => 'nullable|email',
+        'phone' => 'nullable|string|max:30',
     ]);
 
     // 2) Kayıt (Customer modelinde $fillable tanımlı olmalı)
 
-    Customer::create($data);
+
     // 3) Başarılı olursa listeye geri dön ve mesaj göster
     return redirect()
         ->route('customers.index')
@@ -56,10 +60,10 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id){
 
-    {
-          return view('customers.show', compact('customer'));
+        $customer = \App\Models\Customer::findOrFail($id);
+        return view('customers.show', compact('customer'));
        
     }
 
