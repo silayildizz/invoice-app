@@ -14,10 +14,7 @@ class CustomerController extends Controller
      */
     public function index(Customer $customers)
     {
-        if (!Auth::check()) {
-            return redirect('/auth');
-        }
-    // Misafire login & register butonlu açılış sayfası
+       
     
         // tüm müşterileri çek
         $customers = Customer::all();

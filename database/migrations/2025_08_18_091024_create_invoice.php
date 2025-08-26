@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $t) {
     $t->id();
     $t->string('invoice_number')->unique();
-    $t->string('customer');
+    $t->string('customer')->nullable();
     $t->decimal('amount', 10, 2);  // toplam tutar
     $t->enum('status', ['paid' ,'unpaid'])->default('unpaid');
+    $t->string('type')->nullable();
     $t->timestamps();
 });
 
