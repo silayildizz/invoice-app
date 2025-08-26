@@ -14,7 +14,14 @@ class CustomerController extends Controller
      */
     public function index(Customer $customers)
     {
-       
+
+                \Log::info(message: 'dex(Customer $custome');
+
+        if (!Auth::check()) {
+            return redirect('/auth');
+        }
+    // Misafire login & register butonlu açılış sayfası
+
     
         // tüm müşterileri çek
         $customers = Customer::all();
