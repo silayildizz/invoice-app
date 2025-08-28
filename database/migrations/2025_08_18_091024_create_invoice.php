@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $t) {
     $t->id();
+    $t->unsignedBigInteger('user_id')->nullable();
     $t->string('invoice_number')->unique();
     $t->string('customer')->nullable();
+    $t->string('email')->nullable();
     $t->decimal('amount', 10, 2);  // toplam tutar
     $t->enum('status', ['paid' ,'unpaid'])->default('unpaid');
     $t->string('type')->nullable();

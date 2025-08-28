@@ -29,43 +29,28 @@ class AuthController extends Controller
                 \Log::info(message: 'Login form POST edildi 5959');
 
         $request->session()->regenerate();
-                    return redirect('/customers');
-
+        if(auth()->user()->role=='admin'){
+            return redirect('/invoices');
+        }else{
+                    return redirect('/userdashboard');
+        }
     }
 
     return back()->with('login', 'fail')
                  ->withInput($request->only('email'));
          
-        /*if($request->method() == 'GET'){
-            return view('auth.landing');
-        }
       
-          else if($request->method() == 'POST'){
-            echo 'asdfg';
-          $data = $request->only('email', 'password');
-          $remember = $request->boolean('remember');
-       
-        if(Auth::attempt($data, $remember)){
-           
-            $request->session()->regenerate();
-            return redirect(route('customers'))->with('login','success');
-        }else{
-
-            
-            return redirect()->with('login','fail')->withInput();
-        }*/
-
 
     }
     
     public function register(Request $request){
-
+     
          return view('auth.register');
     }
 
     // POST /register
     public function registerPost(Request $request)
-    {
+    { 
         // 1. Doğrulama
         $validated = $request->validate([
             'name'                  => ['required', 'string', 'max:255'],
@@ -87,5 +72,5 @@ class AuthController extends Controller
         // 4. Dashboard'a yönlendir
         return redirect()->route('login')->with('status', 'Registration successful! You can now log in.');
 
-}
+    }
 }

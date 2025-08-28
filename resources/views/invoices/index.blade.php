@@ -4,9 +4,16 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-dark">📄 Invoice List</h2>
-        <a href="{{ route('invoices.create') }}" class="btn btn-success shadow-sm">
-            + New Invoice
-        </a>
+        
+        <div class="d-flex align-items-center gap-2">
+            <a href="{{ route('invoices.create') }}" class="btn btn-success shadow-sm">
+                + New Invoice
+            </a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn btn-outline-danger btn-sm">Çıkış</button>
+            </form>
+        </div>
     </div>
 
     @if(session('success'))
@@ -23,6 +30,7 @@
                     <tr>
                         <th>🧾 Invoice Number</th>
                         <th>👤 Customer</th>
+                        <th> Email</th>
                         <th>💰 Amount</th>
                         <th>📌 Status</th>
                         <th>📂 Type</th>
@@ -34,6 +42,7 @@
                         <tr class="align-middle">
                             <td class="fw-semibold">{{ $invoice->invoice_number }}</td>
                             <td>{{ $invoice->customer }}</td>
+                            <td>{{ $invoice->email }}</td>
                             <td class="text-success">${{ number_format($invoice->amount, 2) }}</td>
                             <td>
                                 <span class="badge rounded-pill bg-{{ $invoice->status === 'paid' ? 'success' : 'warning' }}">
@@ -60,7 +69,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-muted py-4">
+                            <td colspan="7" class="text-muted py-4">
                                 🙁 No invoices found.
                             </td>
                         </tr>
@@ -71,5 +80,4 @@
     </div>
 </div>
 @endsection
-
 

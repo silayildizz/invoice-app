@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 use App\Models\Invoice;
@@ -24,6 +25,12 @@ class InvoiceController extends Controller
         return redirect()->route('invoices.index')->with('success','invoice is deleted');
 
     }
+    public function pay(Invoice $invoice)
+{
+    $invoice->update(['status' => 'paid']);
+    return redirect()->back()->with('success', 'Fatura ödendi.');
+}
+
     public function update(Request $request, Invoice $invoice){
     $invoice->update([
         'type' => $request->input('type')
@@ -33,18 +40,21 @@ class InvoiceController extends Controller
 }
 
     public function store(Request $request){
-        $request->validate([
+        $data = $request->validate([
             'invoice_number' =>['required','unique:invoices'],
             'customer' =>['nullable','string'],
-            'amount' =>['nullable','string'],
+            'email'=>['nullable','email'],
+            'amount' =>['nullable','numeric'],
             'status'=>['nullable','string'],
             'type'=>['required','string'],
 
         ]);
+        // user_id'yi email'e göre ekle
+        $user = User::where('email', $data['email'])->first();
+        $data['user_id'] = $user ? $user->id : null;
 
+        Invoice::create($data);
 
-        Invoice ::create($request->only(['invoice_number','customer','amount','status','type']));
-        return redirect()->route('invoices.index')->with('succes','invoices created thx');
-        //return view('invoices.create');
+        return redirect()->route('invoices.index')->with('success', 'Invoice created successfully.');
     }
 }

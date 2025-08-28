@@ -8,15 +8,12 @@ use App\Http\Controllers\InvoiceController;
 
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\UserDashboardController;
 
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard'); // veya AdminController@index
+})->middleware('auth')->name('admin.dashboard');
 
-
-/*Route::get('/', function () {
-    return view('customers_index', compact('customers'));
-
-
-
-});*/
 //Route::get('/customers', action: [CustomerController::class, 'index']);
 Route::resource('customers', CustomerController::class);
 Route::resource('invoices', InvoiceController::class);
@@ -24,12 +21,17 @@ Route::resource('invoices', InvoiceController::class);
 Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
 
 use App\Http\Controllers\Auth\LoginController;
+Route::post('/auth', [AuthController::class, 'login'])->name('login.post');
 
 
 Route::get('/dashboard',function() {
     return view('dashboard');
 })->middleware(['auth'])->name ('dashboard');
 
+Route::get('/userdashboard', [UserDashboardController::class, 'index'])->middleware('auth');
+
+
+Route::post('/invoices/{invoice}/pay', [InvoiceController::class, 'pay'])->name('invoices.pay');
 
 
 /*oute::get('/invoices', action: [InvoiceController::class , 'index'])->name('invoices.index');
@@ -45,9 +47,22 @@ Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->name('login.post');
 
 Route::get('register',  [AuthController::class, 'register'])->name('register');
-Route::post('register', [AuthController::class, 'register'])->name('register.post');
+Route::post('register', [AuthController::class, 'registerPost'])->name('register.post');
+
+use Illuminate\Support\Facades\Auth;
+
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('/login');
+})->name('logout');
 
 
+Route::middleware('auth')->group(function () {
+    Route::resource('invoices', InvoiceController::class);
+    // Diğer korumalı rotalar varsa buraya ekle
+});
 
 
 
