@@ -6,14 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 
-    {
-    protected $fillable = ['user_id','description','amount','status','due_date'];
+{
+    protected $fillable = ['invoice_number','customer','email','amount','status','type','user_id'];
 
-    public function user()
+        public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-
     
 }

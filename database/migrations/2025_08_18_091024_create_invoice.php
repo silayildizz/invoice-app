@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $t) {
     $t->id();
-    $t->string('customer_name');   // şimdilik ayrı tabloya bağlamadan müşteri adını tut
+    $t->unsignedBigInteger('user_id')->nullable();
     $t->string('invoice_number')->unique();
+    $t->string('customer')->nullable();
+    $t->string('email')->nullable();
     $t->decimal('amount', 10, 2);  // toplam tutar
-    $t->date('invoice_date');      // düzenlenme tarihi
-    $t->date('due_date');          // son ödeme tarihi
-    $t->enum('status', ['pending','paid'])->default('pending'); // sadece 2 durum
+    $t->enum('status', ['paid' ,'unpaid'])->default('unpaid');
+    $t->string('type')->nullable();
     $t->timestamps();
 });
 

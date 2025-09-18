@@ -14,10 +14,14 @@ class CustomerController extends Controller
      */
     public function index(Customer $customers)
     {
+
+                \Log::info(message: 'dex(Customer $custome');
+
         if (!Auth::check()) {
             return redirect('/auth');
         }
     // Misafire login & register butonlu açılış sayfası
+
     
         // tüm müşterileri çek
         $customers = Customer::all();
@@ -48,11 +52,13 @@ class CustomerController extends Controller
         'phone' => 'nullable|string|max:30',
     ]);
 
-    // 2) DB’ye kaydet
-    Customer::create($data);
+    // 2) Kayıt (Customer modelinde $fillable tanımlı olmalı)
 
-    // 3) Geri dönüş (redirect veya json)
-    return redirect()->route('customers.index')->with('success', 'Müşteri başarıyla eklendi.');
+
+    // 3) Başarılı olursa listeye geri dön ve mesaj göster
+    return redirect()
+        ->route('customers.index')
+        ->with('success', 'Müşteri başarıyla eklendi.');
     }
 
     /**
